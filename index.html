@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANG MAN boi</title>
+</head>
+<body>
+    <script>
+        const hangMan = {
+            0:`__\n|\n|\n|\n|\n====`,
+            1: `__\n| O\n|\n|\n|\n====`,
+            2: `__\n| O\n| |\n|\n|\n====`,
+            3: `__\n| O\n|/|\n|\n|\n====`,
+            4: `__\n| O\n|/|\\\n|\n|\n====`,
+            5: `__\n| O\n|/|\\\n|/\n|\n====`,
+            6: `__\n| O\n|/|\\\n|/ \\\n|\n====`,    
+        }
+        let Word = '';
+        let total = 0;
+        let letter = [];
+        const convertToBlank = (Word,letter) => {
+            let Word_array = Word.split('').map((value) =>{
+                if(value === ' '){
+                    return ' ';}
+                for(let j of letter){
+                    if(j === value)return value;
+                }
+                return '_';
+            })
+        return Word_array.join(' ');
+        } 
+
+        const winChecker = (Word,letter = 0,num) =>{
+            if(letter[letter.length-1].length > 1) return Word.split(' ').join('').toUpperCase() === letter[letter.length-1].split(' ').join('').toUpperCase() ? 'YOU WIN' : 'YOU LOSE'
+            if(Word.split(' ').join('').toUpperCase() === convertToBlank(Word,letter).split(' ').join('').toUpperCase())return 'YOU WIN'
+            if(num === 6)return 'YOU LOSE'
+        }   
+        
+        do{
+            Word = prompt('WRITE YOUR WORD').toUpperCase()
+            if(/[^a-z ]/i.test(Word))alert(`${Word} is not a valid word to play (Do not use numbers or simbols)`)
+        }while(/[^a-z ]/i.test(Word))
+        
+        while(total !== 6){
+            let localLetter =''
+            alert(`
+HANGMAN 
+${hangMan[total]}
+
+${convertToBlank(Word,letter)}`)
+            do{
+                localLetter = prompt('WRITE YOU LETTER OR WORD: ').toUpperCase()
+                if(/[^a-z ]/i.test(localLetter))alert(`${localLetter} is not a valid letter to play (Do not use numbers or simbols)`)
+            }while(/[^a-z ]/i.test(localLetter))
+            letter.push(localLetter)
+            if(!(RegExp(localLetter,'ig').test(Word)))total++;
+            if(winChecker(Word,letter,total)){
+                alert(`
+HANGMAN 
+${hangMan[total]}
+
+${Word}
+${winChecker(Word,letter,total)}`)
+                break;
+            }
+        }
+    
+    </script>
+</body>
+</html>
